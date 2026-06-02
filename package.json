@@ -18,7 +18,7 @@
     "mvc",
     "analytics"
   ],
-  "author": "Antigravity",
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
