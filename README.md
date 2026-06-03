@@ -2,15 +2,40 @@
 
 A premium, production-ready, and high-performance **Node.js/Express.js** backend backed by **MongoDB (Mongoose)** for querying, searching, filtering, and analyzing a massive dataset of global earthquakes. 
 
-This backend implements strict **MVC (Model-View-Controller) architecture**, complete validation schemas (using Joi), robust token-based authorization (JWT Access & Refresh pairs), request rate limiting, conditional debug logging, database backups, automated seeding, and 20 advanced custom features.
+This backend implements strict **MVC (Model-View-Controller) architecture**, complete validation schemas (using Joi), robust token-based authorization (JWT Access & Refresh pairs), request rate limiting, conditional debug logging, database backups, automated seeding, and advanced custom features.
 
 ---
 
-## Key Features
+## 🏗️ System Architecture & Workflow
+
+Below is a conceptual workflow of the request-response lifecycle of this application:
+
+```mermaid
+graph TD
+    Client[Client Browser / Postman] -->|HTTP Request| RateLimit[Rate Limiter Middleware]
+    RateLimit -->|Under Threshold| Cors[CORS Middleware]
+    Cors -->|Allowed Origins| Logger[Logging Middleware]
+    Logger -->|Logs Request| Route[Express Router Index /api/v1]
+    Route -->|Checks Auth| AuthMiddleware[Auth Middleware / JWT Validator]
+    AuthMiddleware -->|Validated| Validation[Joi Validation Middleware]
+    Validation -->|Payload Valid| Controller[Controller Layer]
+    Controller -->|Calls business logic| Service[Service Layer]
+    Service -->|Executes Query| Mongoose[Mongoose Models User / Earthquake]
+    Mongoose -->|Interceptors / Pre-hooks| SoftDelete[Soft Delete Middleware filters isDeleted]
+    SoftDelete -->|Sends Query| MongoDB[(MongoDB Database)]
+    MongoDB -->|Result| Mongoose
+    Mongoose --> Service
+    Service --> Controller
+    Controller -->|Unified Format| Client
+```
+
+---
+
+## 🌟 Key Features
 
 1. **Strict MVC Pattern**: Clean division between route configurations, request controllers, backend services, and Mongoose database models.
 2. **Cleansed Data Ingestion**: Automated seeding script that parses the `dataset.json` file, coerces empty values (`""` to `null`), transforms string-encoded fields to double numbers, extracts geographical countries, and bulk loads data in memory-safe blocks of 5,000 documents.
-3. **Advanced Mongoose Schemas**: Includes automated compound text indices, custom validators, and Mongoose pre-hook query query filters.
+3. **Advanced Mongoose Schemas**: Includes automated compound text indices, custom validators, and Mongoose pre-hook query filters.
 4. **Soft Delete Pipeline**: Injects query filters globally into Mongoose `find*`, `countDocuments`, and `aggregate` pipelines to automatically hide documents with `isDeleted: true` unless requested.
 5. **Robust JWT Auth Pairings**: Issuance of short-lived Access Tokens (15 min) and long-lived Refresh Tokens (7 days) with rotation and revocation.
 6. **Detailed Aggregations**: Implements MongoDB aggregation frameworks (`$group`, `$match`, `$project`, `$sort`, `$cond`) delivering depth spreads, magnitude distribution cells, error-rate analyses, and country groupings.
@@ -20,7 +45,7 @@ This backend implements strict **MVC (Model-View-Controller) architecture**, com
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 global_earthquakes/
@@ -70,7 +95,7 @@ global_earthquakes/
 
 ---
 
-## Installation & Setup
+## 🔧 Installation & Setup
 
 ### 1. Prerequisites
 Ensure you have **Node.js** (v16+) and a running **MongoDB** database instance (either local or Mongo Atlas connection string).
@@ -81,11 +106,19 @@ Install dependencies and prepare environment settings:
 # Install dependencies
 npm install
 
-# Setup environment variables (modify defaults in .env if needed)
+# Setup environment variables
 cp .env.example .env
 ```
 
-### 3. Ingest Dataset & Seed Database
+### 3. Environment Configuration Defaults (`.env`)
+Customize the following variables in your `.env` file:
+* `PORT`: Port the server runs on (default: `5000`).
+* `MONGODB_URI`: Connection string to your MongoDB cluster (default: `mongodb://127.0.0.1:27017/earthquakes`).
+* `JWT_SECRET` / `JWT_REFRESH_SECRET`: Secrets used to sign user access and refresh tokens.
+* `NODE_ENV`: Application mode (`development`, `production`, `test`).
+* `DEBUG`: Toggle detailed logging in the console (`true` or `false`).
+
+### 4. Ingest Dataset & Seed Database
 Ensure MongoDB is running, then execute the seeder:
 ```bash
 npm run seed
@@ -94,7 +127,7 @@ This script will parse the `dataset.json` file, cleanse types, extract country i
 
 ---
 
-## Running the Server
+## 🚀 Running the Server
 
 Run the local development server:
 ```bash
@@ -109,7 +142,27 @@ The console will log the active port and confirmation of database connection:
 
 ---
 
-## API Endpoint Reference
+## 🛠️ Detailed Database Scripts & Pipelines
+
+### 1. Seeder Pipeline (`seed.js`)
+The `seed.js` script handles raw data normalization and import into MongoDB:
+- **Idempotency**: Runs `Earthquake.deleteMany({})` first to prevent duplicate entries on rerun.
+- **Normalization**: Standardizes coordinates to floats, coerces empty values to `null`, and extracts country names from descriptions.
+- **Memory Safety**: Ingests data using a chunked algorithm in batches of **5,000 records** to avoid Node.js V8 heap out-of-memory crashes.
+- **Indexing**: Executes `Earthquake.syncIndexes()` at completion to rebuild text search and coordinate indices.
+
+### 2. Backup Pipeline (`backup.js`)
+The backup script performs snapshots of active records:
+- **Soft-Delete Aware**: Automatically filters out deleted records (`isDeleted: true`).
+- **Timestamped Outputs**: Writes to `backup_earthquakes_<timestamp>.json` in a structured, portable format.
+- **Usage**:
+  ```bash
+  npm run backup
+  ```
+
+---
+
+## 📡 API Endpoint Reference
 
 All endpoints are prefixed with `/api/v1` (excluding base URL greetings).
 
@@ -185,18 +238,7 @@ Test specific middleware integrations inside sandbox routes:
 
 ---
 
-## Database Backup & Recovery
-
-Keep your data secure by running automated back-ups:
-```bash
-# Export active database documents to a clean JSON array
-npm run backup
-```
-This will generate a backup file named `backup_earthquakes_<timestamp>.json` detailing all records not marked as deleted, complete with index fields.
-
----
-
-## Response Formats
+## 📦 Response Formats
 
 ### Standard Success Response:
 ```json
