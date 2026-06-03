@@ -6,7 +6,7 @@ This backend implements strict **MVC (Model-View-Controller) architecture**, com
 
 ---
 
-## 🏗️ System Architecture & Workflow
+## System Architecture & Workflow
 
 Below is a conceptual workflow of the request-response lifecycle of this application:
 
@@ -31,7 +31,7 @@ graph TD
 
 ---
 
-## 🌟 Key Features
+## Key Features
 
 1. **Strict MVC Pattern**: Clean division between route configurations, request controllers, backend services, and Mongoose database models.
 2. **Cleansed Data Ingestion**: Automated seeding script that parses the `dataset.json` file, coerces empty values (`""` to `null`), transforms string-encoded fields to double numbers, extracts geographical countries, and bulk loads data in memory-safe blocks of 5,000 documents.
@@ -45,7 +45,7 @@ graph TD
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 global_earthquakes/
@@ -95,7 +95,7 @@ global_earthquakes/
 
 ---
 
-## 🔧 Installation & Setup
+## Installation & Setup
 
 ### 1. Prerequisites
 Ensure you have **Node.js** (v16+) and a running **MongoDB** database instance (either local or Mongo Atlas connection string).
@@ -127,7 +127,7 @@ This script will parse the `dataset.json` file, cleanse types, extract country i
 
 ---
 
-## 🚀 Running the Server
+## Running the Server
 
 Run the local development server:
 ```bash
@@ -142,7 +142,7 @@ The console will log the active port and confirmation of database connection:
 
 ---
 
-## 🛠️ Detailed Database Scripts & Pipelines
+## Detailed Database Scripts & Pipelines
 
 ### 1. Seeder Pipeline (`seed.js`)
 The `seed.js` script handles raw data normalization and import into MongoDB:
@@ -162,7 +162,7 @@ The backup script performs snapshots of active records:
 
 ---
 
-## 📡 API Endpoint Reference
+## API Endpoint Reference
 
 All endpoints are prefixed with `/api/v1` (excluding base URL greetings).
 
@@ -238,7 +238,7 @@ Test specific middleware integrations inside sandbox routes:
 
 ---
 
-## 📦 Response Formats
+## Response Formats
 
 ### Standard Success Response:
 ```json
