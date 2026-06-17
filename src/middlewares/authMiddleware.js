@@ -21,7 +21,7 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 
   // 3. Verify security token
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const decoded = jwt.verify(token, process.env.JWT_SECRET || 'supersecretjwtkey123_global_earthquakes_security_2026');
 
   // 4. Verify user still exists in DB
   const currentUser = await User.findById(decoded.id);

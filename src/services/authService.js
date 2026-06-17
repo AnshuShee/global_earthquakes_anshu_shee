@@ -9,13 +9,13 @@ class AuthService {
   static generateTokens(user) {
     const accessToken = jwt.sign(
       { id: user._id, role: user.role },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET || 'supersecretjwtkey123_global_earthquakes_security_2026',
       { expiresIn: '15m' } // Standard short-lived access token (JWT Expiry Handling)
     );
 
     const refreshToken = jwt.sign(
       { id: user._id },
-      process.env.JWT_REFRESH_SECRET,
+      process.env.JWT_REFRESH_SECRET || 'supersecretrefreshkey456_global_earthquakes_security_2026',
       { expiresIn: '7d' } // Standard long-lived refresh token
     );
 
@@ -106,7 +106,7 @@ class AuthService {
     }
 
     try {
-      const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+      const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET || 'supersecretrefreshkey456_global_earthquakes_security_2026');
       
       const user = await User.findById(decoded.id);
       if (!user || !user.refreshTokens.includes(token)) {

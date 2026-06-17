@@ -57,8 +57,9 @@ const Register = () => {
     setSuccess('');
 
     try {
-      // Connect to the backend API endpoint
-      const response = await fetch('/api/v1/auth/register', {
+      // Connect to the backend API endpoint using Vercel env variable or Render fallback
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://global-earthquakes-anshu-shee.onrender.com';
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

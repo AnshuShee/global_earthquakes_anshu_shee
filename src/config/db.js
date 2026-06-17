@@ -6,7 +6,7 @@ dotenv.config();
 
 const connectDB = async () => {
   try {
-    const connStr = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/earthquakes';
+    const connStr = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb+srv://anshushee2000_db_user:Anshu2007@cluster0.ud2g4rz.mongodb.net/earthquakes?appName=Cluster0';
     
     if (process.env.DEBUG === 'true') {
       console.log(`[Database] Connecting to: ${connStr.replace(/:([^:@]+)@/, ':****@')}`);
@@ -29,7 +29,10 @@ const connectDB = async () => {
 
   } catch (error) {
     console.error(`[Database] Initial MongoDB connection error: ${error.message}`);
-    process.exit(1); // Exit process with failure
+    // Do not exit process in Serverless environments
+    if (process.env.NODE_ENV !== 'production') {
+      process.exit(1);
+    }
   }
 };
 
