@@ -14,6 +14,7 @@ const connectDB = async () => {
 
     const conn = await mongoose.connect(connStr, {
       autoIndex: true, // Auto-build indexes defined in schemas
+      family: 4, // Force IPv4 to fix Render Node.js 18+ DNS resolution bugs
     });
 
     console.log(`[Database] MongoDB Connected: ${conn.connection.host}`);
