@@ -29,7 +29,10 @@ const connectDB = async () => {
 
   } catch (error) {
     console.error(`[Database] Initial MongoDB connection error: ${error.message}`);
-    process.exit(1); // Exit process with failure
+    // Do not exit process in Serverless environments
+    if (process.env.NODE_ENV !== 'production') {
+      process.exit(1);
+    }
   }
 };
 

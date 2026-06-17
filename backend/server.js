@@ -69,8 +69,10 @@ app.use(errorMiddleware);
 
 // 11. Start Express Server
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
-  console.log(`[Server] Express active in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`[Server] Express active in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+  });
+}
 
-module.exports = server;
+module.exports = app;
