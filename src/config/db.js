@@ -6,7 +6,7 @@ dotenv.config();
 
 const connectDB = async () => {
   try {
-    const connStr = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb+srv://anshushee2000_db_user:Anshu2007@cluster0.ud2g4rz.mongodb.net/earthquakes?appName=Cluster0';
+    const connStr = 'mongodb+srv://anshushee2000_db_user:Anshu2007@cluster0.ud2g4rz.mongodb.net/earthquakes?appName=Cluster0';
     
     if (process.env.DEBUG === 'true') {
       console.log(`[Database] Connecting to: ${connStr.replace(/:([^:@]+)@/, ':****@')}`);
@@ -14,6 +14,7 @@ const connectDB = async () => {
 
     const conn = await mongoose.connect(connStr, {
       autoIndex: true, // Auto-build indexes defined in schemas
+      family: 4, // Force IPv4 to fix Render Node.js 18+ DNS resolution bugs
     });
 
     console.log(`[Database] MongoDB Connected: ${conn.connection.host}`);
