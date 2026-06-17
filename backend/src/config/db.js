@@ -6,7 +6,7 @@ dotenv.config();
 
 const connectDB = async () => {
   try {
-    const connStr = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb+srv://anshushee2000_db_user:Anshu2007@cluster0.ud2g4rz.mongodb.net/earthquakes?appName=Cluster0';
+    const connStr = 'mongodb+srv://anshushee2000_db_user:Anshu2007@cluster0.ud2g4rz.mongodb.net/earthquakes?appName=Cluster0';
     
     if (process.env.DEBUG === 'true') {
       console.log(`[Database] Connecting to: ${connStr.replace(/:([^:@]+)@/, ':****@')}`);
