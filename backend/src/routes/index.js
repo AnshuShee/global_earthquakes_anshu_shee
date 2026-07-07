@@ -3,6 +3,7 @@ const authRoutes = require('./authRoutes');
 const earthquakeRoutes = require('./earthquakeRoutes');
 const analyticsRoutes = require('./analyticsRoutes');
 const systemRoutes = require('./systemRoutes');
+const userRoutes = require('./userRoutes');
 const EarthquakeController = require('../controllers/earthquakeController');
 const { protect, restrictTo } = require('../middlewares/authMiddleware');
 const { searchLimiter } = require('../middlewares/rateLimitMiddleware');
@@ -15,6 +16,7 @@ const router = express.Router();
 router.use('/auth', authRoutes);
 router.use('/jwt', authRoutes); // Reuse auth routes under /jwt mount point for clean structure
 router.use('/earthquakes', earthquakeRoutes);
+router.use('/users', userRoutes);
 router.use('/', analyticsRoutes); // Mounts /analytics/earthquakes/* and /stats/earthquakes/*
 router.use('/', systemRoutes);    // Mounts /system/health and /middleware/*
 
