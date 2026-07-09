@@ -1,0 +1,58 @@
+.map-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.map-wrapper {
+  padding: 1rem;
+}
+
+/* Dark mode filter for OpenStreetMap tiles */
+.map-tiles {
+  filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+}
+
+.map-popup {
+  color: #111;
+  /* Keep popup text dark because leaflet popups have white backgrounds by default */
+  font-family: inherit;
+  font-size: 0.875rem;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+}
+
+/* Floating filters bar in header */
+.map-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+
+.map-filter-btn {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  transition: var(--transition-fast);
+}
+
+.map-filter-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+}
+
+.map-filter-btn.active {
+  background: var(--accent-primary);
+  color: white;
+  box-shadow: var(--glow-effect);
+}
